@@ -8,6 +8,9 @@ spec:
     - name: host-volume
       persistentVolumeClaim:
         claimName: cifar-workspace-read-claim
+    - name: nfs-volume
+      persistentVolumeClaim:
+        claimName: cifar-nfs-pvc
   containers:
     - image: busybox
       name: busybox
@@ -16,3 +19,5 @@ spec:
       volumeMounts:
       - name: host-volume
         mountPath: /mydata
+      - name: nfs-volume
+        mountPath: /nfs_data
