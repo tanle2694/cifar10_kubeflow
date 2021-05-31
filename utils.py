@@ -1,5 +1,5 @@
 from typing import Dict
-
+import time
 
 def use_k8s_secret(secret_name: str = 'k8s-secret', k8s_secret_key_to_env: Dict = {}):
     """An operator that configures the container to use k8s credentials.
@@ -44,3 +44,19 @@ def use_k8s_secret(secret_name: str = 'k8s-secret', k8s_secret_key_to_env: Dict 
         return task
 
     return _use_k8s_secret
+
+
+class Timer:
+    def __init__(self):
+        self.start_time = time.time()
+        self.end_time = 0
+        self.steps = 0
+
+    def step(self):
+        self.steps += 1
+        self.end_time = time.time()
+
+    def get_speed(self):
+        speed = 1.0 * self.steps / (self.end_time - self.start_time)
+        return speed
+

@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cifar-workspace-read-claim
+  namespace: kubeflow-user-example-com
+spec:
+  storageClassName: cifar
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi

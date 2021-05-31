@@ -1,0 +1,15 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cifar-workspace
+  namespace: kubeflow-user-example-com
+  labels:
+    type: local
+spec:
+  storageClassName: cifar
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/workspace"

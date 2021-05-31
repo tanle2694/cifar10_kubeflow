@@ -10,6 +10,8 @@ from torch.utils.data import random_split
 from torch.utils.data.dataloader import DataLoader
 from resnet_models import ResNet18
 from torch.utils.data.sampler import SubsetRandomSampler
+from utils import Timer
+
 
 import os
 import argparse
@@ -24,7 +26,7 @@ parser.add_argument('--lr', type=float, default=0.01, help="init learningrate")
 parser.add_argument("--use_random_crop", type=bool, default=True, help="use random crop augmentation")
 parser.add_argument("--use_horizon_flip", type=bool, default=True, help="use random horizontal flip augmentation")
 parser.add_argument("--input_data", type=str, default="/home/tan.le2/PycharmProjects/cifar10_kubeflow/pytorch-cifar/data", help="Directory include data")
-parser.add_argument("--epoch", type=int, default=20)
+parser.add_argument("--epoch", type=int, default=1)
 
 args = parser.parse_args()
 
@@ -53,8 +55,10 @@ valid_dataset = torchvision.datasets.CIFAR10(root=args.input_data, download=Fals
                                               transform=transform_test)
 
 best_acc = 0
+best_val_loss = 1000
 valid_size = 0.1 # 10% datatraining
 random_seed = 123
+iteration = 0
 num_train = len(train_dataset)
 indices = list(range(num_train))
 split = int(np.floor(valid_size * num_train))
@@ -94,12 +98,16 @@ optimizer = optim.SGD(net.parameters(), lr=args.lr,
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
-def train(epoch):
+def train(args, epoch, iteration):
     net.train()
     train_loss = 0
     correct = 0
     total = 0
+    print("-------------------------------------------------------------------------")
+    print(f"Epoch: {epoch}/{args.epoch}")
+    timer = Timer()
     for batch_idx, (inputs, targets) in enumerate(train_loader):
+        iteration += 1
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
@@ -111,17 +119,24 @@ def train(epoch):
         _, predicted = outputs.max(1)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
+        timer.step()
         if batch_idx % 100 == 0:
-            print(batch_idx, len(train_loader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                     % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+            avg_loss = '%.3f' % (train_loss / (batch_idx + 1))
+            acc = '%.3f' % (100.*correct/total)
+            speed = '%.3f' % timer.get_speed()
+            print(f"Batch-id: {batch_idx}/{len(train_loader)} | Loss: {avg_loss}, "
+                  f" | Acc: {acc}  | Correct/total: {correct}/{total} | Speed: {speed} batch/s")
+            timer = Timer()
+    return iteration
 
 
 def validation(epoch):
-    global best_acc
+    global best_acc, best_val_loss
     net.eval()
     test_loss = 0
     correct = 0
     total = 0
+    print("Validation")
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(valid_loader):
             inputs, targets = inputs.to(device), targets.to(device)
@@ -132,14 +147,15 @@ def validation(epoch):
             _, predicted = outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
-            if batch_idx % 10 == 0:
-                print(batch_idx, len(valid_loader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                         % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save checkpoint.
-    acc = 100.*correct/total
+    val_loss = '.3f' % (test_loss / (len(valid_loader) + 1))
+    acc = '.3f' % (100.*correct/total)
+    print(f"Val Loss: {val_loss} | Best val loss: {best_val_loss} | Acc: {acc} | Best Acc: {best_acc}")
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
     if acc > best_acc:
-        print('Saving..')
+        print('Saving best model')
         state = {
             'net': net.state_dict(),
             'acc': acc,
@@ -150,6 +166,7 @@ def validation(epoch):
         torch.save(state, './checkpoint/ckpt.pth')
         best_acc = acc
 
+
 for i in range(args.epoch):
-    train(i)
+    iteration = train(args, i, iteration)
     validation(i)
