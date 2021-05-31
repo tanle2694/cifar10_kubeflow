@@ -127,6 +127,7 @@ def train(args, epoch, iteration):
             print(f"Batch-id: {batch_idx}/{len(train_loader)} | Loss: {avg_loss}, "
                   f" | Acc: {acc}  | Correct/total: {correct}/{total} | Speed: {speed} batch/s")
             timer = Timer()
+            break
     return iteration
 
 
@@ -149,8 +150,8 @@ def validation(epoch):
             correct += predicted.eq(targets).sum().item()
 
     # Save checkpoint.
-    val_loss = '.3f' % (test_loss / (len(valid_loader) + 1))
-    acc = '.3f' % (100.*correct/total)
+    val_loss = '%.3f' % (test_loss / (len(valid_loader) + 1))
+    acc = '%.3f' % (100.*correct/total)
     print(f"Val Loss: {val_loss} | Best val loss: {best_val_loss} | Acc: {acc} | Best Acc: {best_acc}")
     if val_loss < best_val_loss:
         best_val_loss = val_loss
