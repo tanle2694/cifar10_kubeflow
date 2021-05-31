@@ -28,7 +28,7 @@ MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+#  before PyInstaller builds the exe, so as to inject date/yamls infos into it.
 *.manifest
 *.spec
 
@@ -138,3 +138,5 @@ dmypy.json
 cython_debug/
 
 .idea
+get_cookie.sh
+cookie.txt
