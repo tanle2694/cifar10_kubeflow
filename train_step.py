@@ -127,7 +127,7 @@ def train(args, epoch, iteration):
             print(f"Batch-id: {batch_idx}/{len(train_loader)} | Loss: {avg_loss}, "
                   f" | Acc: {acc}  | Correct/total: {correct}/{total} | Speed: {speed} batch/s")
             timer = Timer()
-            break
+
     return iteration
 
 
