@@ -150,9 +150,10 @@ def validation(epoch):
             correct += predicted.eq(targets).sum().item()
 
     # Save checkpoint.
-    val_loss = '%.3f' % (test_loss / (len(valid_loader) + 1))
-    acc = '%.3f' % (100.*correct/total)
-    print(f"Val Loss: {val_loss} | Best val loss: {best_val_loss} | Acc: {acc} | Best Acc: {best_acc}")
+    val_loss = test_loss / (len(valid_loader) + 1)
+    acc = 100.*correct/total
+    print(f"Val Loss: {'%.3f' % (val_loss)} | Best val loss: {'%.3f' % (best_val_loss)} | "
+          f"Acc: {'%.3f' % (acc)} | Best Acc: {best_acc}")
     if val_loss < best_val_loss:
         best_val_loss = val_loss
     if acc > best_acc:
