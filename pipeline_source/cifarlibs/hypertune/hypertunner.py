@@ -78,7 +78,11 @@ class HyperTunner(AbstractHyperTunner):
                 "image": "pytorch-mnist:latest",
                 "command": ["python", "/opt/pytorch-mnist/mnist.py", "--epochs=1",
                             "--lr=${trialParameters.lr}",
-                            "--momentum=${trialParameters.momentum}"]
+                            "--momentum=${trialParameters.momentum}"],
+                "envs": [{
+                    "name": "PYTHONPATH",
+                    "value": "/opt/pytorch-mnist/"
+                }]
             }
 
             pvcs: [
@@ -148,8 +152,11 @@ class HyperTunner(AbstractHyperTunner):
     def get_optimal_hyperparameters(self):
         opt_trial = self._kclient.get_optimal_hyperparameters(name=self._experiment_name,
                                                          namespace=self._namespace)
-        best_param = opt_trial["currentOptimalTrial"]["parameterAssignments"]
-        return best_param
+        best_params = opt_trial["currentOptimalTrial"]["parameterAssignments"]
+        best_param_json = {}
+        for hp in best_params:
+            best_param_json[hp['name']] = hp['value']
+        return best_param_json
 
     def delete_experiment(self):
         self._kclient.delete_experiment(name=self._experiment_name, namespace=self._namespace)
@@ -204,11 +211,11 @@ class HyperTunner(AbstractHyperTunner):
         volumes_mount = []
 
         for i, pvc in enumerate(pvcs):
-            volume_spec = {"name": f"pvc_{i}",
+            volume_spec = {"name": f"pvc-{i}",
                            "persistentVolumeClaim": {"claimName": pvc['claimName']}
                            }
             volumes.append(volume_spec)
-            volume_mount_spec = {"name": f"pvc_{i}",
+            volume_mount_spec = {"name": f"pvc-{i}",
                                  "mountPath": pvc['mountPath']}
             volumes_mount.append(volume_mount_spec)
         if (len(volumes) > 0) and (len(volumes_mount) > 0):
@@ -217,6 +224,8 @@ class HyperTunner(AbstractHyperTunner):
         trial_spec['spec']['template']['spec']['containers'][0]['name'] = container['name']
         trial_spec['spec']['template']['spec']['containers'][0]['image'] = container['image']
         trial_spec['spec']['template']['spec']['containers'][0]['command'] = container['command']
+        if len(container["envs"]) > 0:
+            trial_spec['spec']['template']['spec']['containers'][0]['env'] = container['envs']
         return trial_spec
 
     @staticmethod
