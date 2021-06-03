@@ -5,3 +5,5 @@ kubeflow-katib==0.11.0
 kfserving==0.4.1
 torch==1.8.1
 torchvision==0.9.1
+matplotlib==3.4.2
+tensorboard==2.5.0
