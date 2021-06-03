@@ -49,6 +49,7 @@ class MonitorEarlyStop:
             logger.info(f"Model not improved {self.mnt_variable} in {self.nb_not_improve} epochs ")
         else:
             logger.info(f"{self.mnt_variable} improve from {self.mnt_best} to {step_result}")
+
             self.mnt_best = step_result
             self.nb_not_improve = 0
 

@@ -205,6 +205,11 @@ class CifarTrainer(AbstractTrainer):
         improved, need_stop = self._ES_monitor.check_to_stop({'acc': acc, "loss": val_loss})
         if improved:
             self._save_checkpoint()
+            # Log for katib collector
+            logging.info(
+                "{{metricName: accuracy, metricValue: {:.4f}}};{{metricName: loss, metricValue: {:.4f}}}\n".format(
+                    acc, val_loss))
+
         return need_stop
 
     def _save_checkpoint(self):
