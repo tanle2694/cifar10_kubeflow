@@ -1,0 +1,93 @@
+{
+  "objective_spec": {
+                    "type": "maximize",
+                    "goal": 0.8,
+                    "objective_metric_name": "accuracy",
+                    "additional_metric_names": ["loss"]
+                },
+  "parameters_spec": [
+                {
+                    "name": "batch-size",
+                    "parameter_type": "categorical",
+                    "feasible_space": { "min": null,
+                                        "max": null,
+                                        "list": ["8", "16", "32"],
+                                        "step": null},
+                    "description": "batch size"
+                },
+                {
+                    "name": "lr",
+                    "parameter_type": "double",
+                    "feasible_space": { "min": "0.001",
+                                        "max": "0.01",
+                                        "list": null,
+                                        "step": null},
+                    "description": "learning rate"
+                },
+                {
+                    "name": "use-random-crop",
+                    "parameter_type": "categorical",
+                    "feasible_space": { "min": null,
+                                        "max": null,
+                                        "list": ["true", "false"],
+                                        "step": null},
+                    "description": "augmentation"
+                },
+                {
+                    "name": "use-horizon-flip",
+                    "parameter_type": "categorical",
+                    "feasible_space": { "min": null,
+                                        "max": null,
+                                        "list": ["true", "false"],
+                                        "step": null},
+                    "description": "augmentation"
+                },
+                {
+                    "name": "epoch",
+                    "parameter_type": "int",
+                    "feasible_space": { "min": "3",
+                                        "max": "10",
+                                        "list": null,
+                                        "step": null},
+                    "description": "epoch"
+                },
+                {
+                    "name": "optimizer",
+                    "parameter_type": "categorical",
+                    "feasible_space": { "min": null,
+                                        "max": null,
+                                        "list": ["SGD", "Adam"],
+                                        "step": null},
+                    "description": "algorithm optimzation"
+                },
+                {
+                    "name": "weight-decay",
+                    "parameter_type": "double",
+                    "feasible_space": { "min": "5e-5",
+                                        "max": "5e-4",
+                                        "list": null,
+                                        "step": null},
+                    "description": "L2 weight decay"
+                }
+
+            ],
+  "container": {
+    "name": "pytorch",
+    "image": "envgpu:latest",
+    "command": ["python", "/tmp/src/pipeline_source/pipeline_source/training_step/training_step.py",
+                "--input_data=/tmp/data/cifar_data/data",
+                "--batch_size=${trialParameters.batch-size}",
+                "--lr=${trialParameters.lr}",
+                "--use_random_crop=${trialParameters.use-random-crop}",
+                "--use_horizon_flip=${trialParameters.use-horizon-flip}",
+                "--epoch=${trialParameters.epoch}",
+                "--use_horizon_flip=${trialParameters.use-horizon-flip}",
+                "--weight_decay=${trialParameters.weight-decay}",
+                "--optimizer=${trialParameters.optimizer}"
+    ],
+    "envs": [{
+                    "name": "PYTHONPATH",
+                    "value": "/tmp/src/pipeline_source/pipeline_source/"
+                }]
+  }
+}
