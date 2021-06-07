@@ -9,13 +9,6 @@ import time
 logger = logging.getLogger(__name__)
 
 
-def update_args(input_json_str, args):
-    input_json = json.loads(input_json_str)
-    temp_args = argparse.Namespace()
-    temp_args.__dict__.update(temp_args)
-    args = parse
-
-
 def get_pipeline_args():
     parser = argparse.ArgumentParser("Training step")
 
