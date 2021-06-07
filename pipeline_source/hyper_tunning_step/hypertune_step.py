@@ -58,6 +58,8 @@ def main(args):
     katib_tunner.wait_for_completion()
     best_hyper_parameter = katib_tunner.get_optimal_hyperparameters()
     print(best_hyper_parameter)
+    katib_tunner.write_json_to_file(best_hyper_parameter, args.best_hp_file)
+    print('Saved hyper-parameter to file')
 
 args = get_pipeline_args()
 main(args)
