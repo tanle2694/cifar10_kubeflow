@@ -14,7 +14,7 @@ def get_pipeline_args():
     parser.add_argument("--namespace", type=str, default="kubeflow-user-example-com", help="namespace kubeflow")
     parser.add_argument("--experiment_name", type=str, default="testkatibstep", help="Experiment name of hyper-tunning")
     parser.add_argument("--algorithm_name", type=str, default="random", choices=["random", "grid", ""])
-    parser.add_argument("--best_hp", type=str, help="File save best hyper-parameters after tunning")
+    parser.add_argument("--best_hp_file", type=str, help="File save best hyper-parameters after tunning")
     parser.add_argument("--max_trial_count", type=int, default=3, help="max trial experiment")
     parser.add_argument("--max_failed_trial_count", type=int, default=2, help="max trial failed experiment")
     parser.add_argument("--parallel_trial_count", type=int, default=2, help="parallel_trial_count")
@@ -50,7 +50,8 @@ def main(args):
         pvcs=pvcs,
         max_trial_count=args.max_trial_count,
         max_failed_trial_count=args.max_failed_trial_count,
-        parallel_trial_count=args.parallel_trial_count
+        parallel_trial_count=args.parallel_trial_count,
+        best_hp_file=args.best_hp_file
     )
 
     katib_tunner.start_experiments()

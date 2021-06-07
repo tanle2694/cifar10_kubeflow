@@ -2,6 +2,9 @@ import os
 import abc
 import logging
 import time
+import json
+import errno
+
 from kubeflow.katib import KatibClient
 from kubernetes.client import V1ObjectMeta
 from kubeflow.katib import V1beta1Experiment
@@ -30,7 +33,7 @@ class AbstractHyperTunner(metaclass=abc.ABCMeta):
 
 class HyperTunner(AbstractHyperTunner):
     def __init__(self, namespace, experiment_name, algorithm_name, objective_spec, parameters_spec, container, pvcs,
-                 max_trial_count, parallel_trial_count, max_failed_trial_count):
+                 max_trial_count, parallel_trial_count, max_failed_trial_count, best_hp_file):
         """
         HyperTunner class
             namespace: str
@@ -92,6 +95,7 @@ class HyperTunner(AbstractHyperTunner):
                 }
             ]
         """
+        self._best_hp_file = best_hp_file
         self._namespace = namespace
         self._experiment_name = experiment_name
 
@@ -164,6 +168,17 @@ class HyperTunner(AbstractHyperTunner):
     @staticmethod
     def setup_metadata(experiment_name, namespace):
         return V1ObjectMeta(name=experiment_name, namespace=namespace)
+
+    @staticmethod
+    def write_json_to_file(json_input, file_output):
+        if not os.path.exists(os.path.dirname(file_output)):
+            try:
+                os.makedirs(os.path.dirname(file_output))
+            except OSError as exc:  # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        with open(file_output, 'w', encoding='utf-8') as f:
+            json.dump(json_input, f, ensure_ascii=False, indent=4)
 
     @staticmethod
     def setup_algorithm(algorithm_name):
