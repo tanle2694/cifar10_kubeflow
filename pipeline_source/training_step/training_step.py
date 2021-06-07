@@ -1,11 +1,19 @@
 import argparse
 import torch
+import json
 from cifarlibs.training.trainer import CifarTrainer
 import logging
 import cifarlibs.utils.logging_handler
 torch.manual_seed(43)
 import time
 logger = logging.getLogger(__name__)
+
+
+def update_args(input_json_str, args):
+    input_json = json.loads(input_json_str)
+    temp_args = argparse.Namespace()
+    temp_args.__dict__.update(temp_args)
+    args = parse
 
 
 def get_pipeline_args():
@@ -26,8 +34,16 @@ def get_pipeline_args():
     parser.add_argument("--nb_earlystop", type=int, default=10)
     parser.add_argument("--checkpoint_path", type=str, default="./checkpoints")
     parser.add_argument("--tensorboard_path", type=str, default="/tmp/tensorboard")
+    parser.add_argument("--tune_hp", type=str, help="dict str result of hyper parameters tunning step")
 
     args = parser.parse_args()
+
+    if args.tune_hp:
+        tune_hp_json = json.loads(args.tune_hp)
+        temp_args = argparse.Namespace()
+        temp_args.__dict__.update(tune_hp_json)
+        args = parser.parse_args(namespace=temp_args)
+
     return args
 
 
