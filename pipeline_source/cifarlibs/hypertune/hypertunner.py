@@ -178,7 +178,7 @@ class HyperTunner(AbstractHyperTunner):
                 if exc.errno != errno.EEXIST:
                     raise
         with open(file_output, 'w', encoding='utf-8') as f:
-            json.dump(json_input, f, ensure_ascii=False, indent=4)
+            json.dumps(json_input, f, ensure_ascii=False, indent=4)
 
     @staticmethod
     def setup_algorithm(algorithm_name):
