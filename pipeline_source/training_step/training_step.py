@@ -43,7 +43,10 @@ def get_pipeline_args():
 if __name__ == "__main__":
     logger.info("Getting args")
     args = get_pipeline_args()
-
+    print("Tuned hyperparameters:")
+    print(args.tune_hp)
+    print("Args:")
+    print(args)
     logger.info("Setup trainer")
     trainer = CifarTrainer(input_data_dir=args.input_data,
                            epochs=args.epoch,
