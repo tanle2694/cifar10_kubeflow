@@ -158,8 +158,10 @@ class HyperTunner(AbstractHyperTunner):
                                                          namespace=self._namespace)
         best_params = opt_trial["currentOptimalTrial"]["parameterAssignments"]
         best_param_json = {}
+        print("Best params:")
         for hp in best_params:
             best_param_json[hp['name']] = hp['value']
+            print(hp['name'], hp['value'])
         return best_param_json
 
     def delete_experiment(self):
