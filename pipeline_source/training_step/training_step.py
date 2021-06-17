@@ -2,6 +2,7 @@ import argparse
 import torch
 import json
 from cifarlibs.training.trainer import CifarTrainer
+from cifarlibs.utils.args_update import args_update
 import logging
 import cifarlibs.utils.logging_handler
 torch.manual_seed(43)
@@ -30,12 +31,8 @@ def get_pipeline_args():
     parser.add_argument("--tune_hp", type=str, help="dict str result of hyper parameters tunning step")
 
     args = parser.parse_args()
-
     if args.tune_hp:
-        tune_hp_json = json.loads(args.tune_hp)
-        temp_args = argparse.Namespace()
-        temp_args.__dict__.update(tune_hp_json)
-        args = parser.parse_args(namespace=temp_args)
+        args = args_update(parser, args.tune_hp)
 
     return args
 
