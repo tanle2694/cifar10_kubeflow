@@ -220,7 +220,7 @@ class CifarTrainer(AbstractTrainer):
         if not os.path.exists(self._checkpoint_path):
             os.mkdir(self._checkpoint_path)
         torch.save(state, os.path.join(self._checkpoint_path, "model_best.pth"))
-        logger.info("Saved best model")
+        logger.info("Saved best model: %s" % (os.path.join(self._checkpoint_path, "model_best.pth")))
 
 
 
