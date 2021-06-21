@@ -29,16 +29,12 @@
 <!-- ABOUT THE PROJECT -->
 ## 1. About The Project
 
-
-<img src="images/pipeline.png" alt="drawing" width="150"/>
-<img src="images/katibs.png" alt="drawing" width="650"/>
-
-Kubeflow is a ....
-
-In this project, I will build an end-to-end Machine learning system on Kubeflow. It provides components for 
+In this project, I will build an end-to-end Machine learning project for production. It includes components for 
 each stage in the ML lifecycle, from data-preprocessing through hyperparameter tuning, training, evaluation and 
 deployment automatically.
  
+![](images/overall.png)
+
  ### Built With
  
  Major frameworks and tools are used in this project:
