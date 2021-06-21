@@ -48,7 +48,8 @@ including prediction, pre-processing, post-processing and explainability.
  Major frameworks and tools are used in this project:
  * [Kubernetes]()
  * [Kubeflow pipeline](https://www.kubeflow.org/docs/about/kubeflow/)
- * [Trition inference server + KFServing]()
+ * [KFServing](https://github.com/kubeflow/kfserving)
+ * [MLFlow](https://mlflow.org/docs/latest/index.html)
  * [ELK stack]()
  * [Pytorch]()
  
