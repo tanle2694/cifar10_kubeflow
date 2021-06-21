@@ -11,6 +11,9 @@ spec:
     - name: nfs-volume
       persistentVolumeClaim:
         claimName: cifar-nfs-pvc
+    - name: git
+      persistentVolumeClaim:
+          claimName: cifar-git-src
   containers:
     - image: busybox
       name: busybox
@@ -21,3 +24,5 @@ spec:
         mountPath: /mydata
       - name: nfs-volume
         mountPath: /nfs_data
+      - name: git
+        mountPath: /tmp/src

@@ -11,3 +11,4 @@ RUN pip install kfp==1.4.0
 RUN pip install boto3==1.17.74
 RUN pip install kubeflow-katib==0.11.0
 RUN pip install kfserving==0.4.1
+RUN pip install pandas==1.2.4
