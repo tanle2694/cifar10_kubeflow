@@ -29,9 +29,17 @@
 <!-- ABOUT THE PROJECT -->
 ## 1. About The Project
 
-In this project, I will build an end-to-end Machine learning project for production. It includes components for 
-each stage in the ML lifecycle, from data-preprocessing through hyperparameter tuning, training, evaluation and 
-deployment automatically.
+In this project, I will build an end-to-end Machine learning project for production on k8s system. It includes the
+ main components:
+
+- ML pipeline: Orchestrating and automating the ML pipeline using Kubeflow Pipelines . It is composed of steps 
+“data-preparation”, “Hyperparameters tuning” , “Training”, “Evaluation”. After the ML pipeline finishes, the output 
+model and metadata will be registered into a “Model registry” and uploaded to s3 for tracking.
+
+- Inference system: Use KFServing to deploy models with main serving features like GPU Autoscaling, Scale to Zero and 
+Canary Rollouts to the ML deployments. It enables a simple, pluggable and complete story for Production ML Serving 
+including prediction, pre-processing, post-processing and explainability.
+
  
 ![](images/overall.png)
 
