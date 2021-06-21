@@ -6,7 +6,7 @@ import os
 import kfp.dsl as dsl
 import time
 
-from utils import use_k8s_secret
+from cifarlibs.utils.k8s_funcs import use_k8s_secret
 from kubernetes import client as k8s_client
 
 from kfp.dsl._pipeline import PipelineConf
