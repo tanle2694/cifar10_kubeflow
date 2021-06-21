@@ -74,7 +74,7 @@
   "container": {
     "name": "pytorch",
     "image": "envgpu:latest",
-    "command": ["python", "/tmp/src/pipeline_source/pipeline_source/training_step/training_step.py",
+    "command": ["python", "/tmp/src/git_clone_folder/pipeline_source/training_step/training_step.py",
                 "--input_data=/tmp/data/cifar_data/data",
                 "--batch_size=${trialParameters.batch-size}",
                 "--lr=${trialParameters.lr}",
