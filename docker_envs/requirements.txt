@@ -1,4 +1,8 @@
-torch==1.8.1+cu111 torchvision==0.9.1+cu111 -f https://download.pytorch.org/whl/torch_stable.htmlmatplotlib==3.4.2
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==1.8.1+cu111
+-f https://download.pytorch.org/whl/torch_stable.html
+torchvision==0.9.1+cu111
+matplotlib==3.4.2
 kubernetes==10.0.1
 kfp==1.4.0
 boto3==1.17.74
